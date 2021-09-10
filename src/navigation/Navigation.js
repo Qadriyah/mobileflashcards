@@ -15,7 +15,11 @@ const iconSize = 32;
 
 const BottomTabs = () => {
   return (
-    <Tab.Navigator tabBarOptions={{ activeTintColor: Colors.GREEN }}>
+    <Tab.Navigator
+      screenOptions={{
+        tabBarActiveTintColor: Colors.GREEN,
+      }}
+    >
       <Tab.Screen
         name="Decks"
         component={HomeScreen}
