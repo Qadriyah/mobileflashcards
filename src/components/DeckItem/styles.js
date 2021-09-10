@@ -14,15 +14,17 @@ const styles = StyleSheet.create({
     padding: 10,
     alignItems: "center",
     justifyContent: "center",
-    minHeight: 100,
+    minHeight: 150,
   },
   title: {
     color: Colors.BLACK,
-    fontSize: 20,
+    fontSize: 24,
     fontWeight: "700",
   },
   counter: {
     color: Colors.BLACK,
+    fontSize: 18,
+    marginTop: 5,
   },
 });
 
