@@ -3,28 +3,27 @@ import Colors from "../../utils/colors";
 
 const styles = StyleSheet.create({
   container: {
-    shadowColor: Colors.GREY,
-    shadowOffset: { width: 0, height: 3 },
-    shadowOpacity: 0.8,
-    shadowRadius: 2,
-    elevation: 2,
-    backgroundColor: Colors.WHITE,
-    borderRadius: 10,
-    marginBottom: 15,
+    flex: 1,
     padding: 10,
     alignItems: "center",
     justifyContent: "center",
-    minHeight: 150,
   },
   title: {
     color: Colors.BLACK,
-    fontSize: 24,
+    fontSize: 32,
     fontWeight: "700",
   },
   counter: {
     color: Colors.BLACK,
-    fontSize: 18,
+    fontSize: 24,
     marginTop: 5,
+  },
+  buttonContainer: {
+    width: "100%",
+  },
+  cardContainer: {
+    alignItems: "center",
+    padding: 40,
   },
 });
 

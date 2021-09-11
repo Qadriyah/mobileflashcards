@@ -17,8 +17,8 @@ const HomeScreen = ({ navigation }) => {
     dispatch(getAllDecks());
   }, [dispatch]);
 
-  const onPress = () => {
-    console.log(navigation, ">>>>>>>>>>>>");
+  const onPress = ({ title }) => {
+    navigation.navigate("Deck", { title });
   };
 
   return (

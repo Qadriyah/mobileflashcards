@@ -1,5 +1,5 @@
 import * as types from "../constants/deck";
-import { saveDeck, getDecks } from "../../api";
+import { saveDeck, getDecks, addCardToDeck } from "../../api";
 
 const saveDeckRequest = (promise) => {
   return {
@@ -68,6 +68,42 @@ export const getAllDecks = () => {
       })
       .catch((error) => {
         dispatch(getDecksFailed(error));
+      });
+    return promise;
+  };
+};
+
+const saveCardRequest = (promise) => {
+  return {
+    type: types.SAVE_CARD_REQUEST,
+    payload: promise,
+  };
+};
+
+const saveCardFailed = (error) => {
+  return {
+    type: types.SAVE_CARD_FAILED,
+    payload: error,
+  };
+};
+
+const saveCardSuccess = (card) => {
+  return {
+    type: types.SAVE_CARD_SUCCESS,
+    payload: card,
+  };
+};
+
+export const saveCard = ({ deckId, card }) => {
+  return (dispatch) => {
+    const promise = addCardToDeck({ card, deckId });
+    dispatch(saveCardRequest(promise));
+    promise
+      .then((data) => {
+        dispatch(saveCardSuccess(data));
+      })
+      .catch((error) => {
+        dispatch(saveCardFailed(error));
       });
     return promise;
   };

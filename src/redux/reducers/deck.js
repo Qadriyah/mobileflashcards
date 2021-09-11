@@ -53,6 +53,35 @@ const deckReducer = (state = initialState, action) => {
         decks: action.payload,
       };
 
+    case types.SAVE_CARD_REQUEST:
+      return {
+        ...state,
+        requesting: true,
+      };
+
+    case types.SAVE_CARD_FAILED:
+      return {
+        ...state,
+        requesting: false,
+        error: action.payload,
+      };
+
+    case types.SAVE_CARD_SUCCESS:
+      const { deckId, card } = action.payload;
+      return {
+        ...state,
+        requesting: false,
+        success: true,
+        error: null,
+        decks: {
+          ...state.decks,
+          [deckId]: {
+            ...state.decks[deckId],
+            questions: [...state.decks[deckId].questions, ...[card]],
+          },
+        },
+      };
+
     default:
       return state;
   }

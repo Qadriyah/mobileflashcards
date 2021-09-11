@@ -20,7 +20,7 @@ export const saveDeck = async (title) => {
 export const getDecks = async () => {
   try {
     const decks = await AsyncStorage.getItem(DECKS);
-    return JSON.parse(decks);
+    return decks ? JSON.parse(decks) : null;
   } catch (error) {
     return error;
   }
@@ -29,19 +29,26 @@ export const getDecks = async () => {
 export const getDeck = async (deckId) => {
   try {
     let decks = await AsyncStorage.getItem(DECKS);
-    decks = JSON.parse(decks);
-    return decks[deckId];
+    decks = decks ? JSON.parse(decks) : null;
+    return decks ? decks[deckId] : null;
   } catch (error) {
     return error;
   }
 };
 
-export const addCardToDeck = async (deckId, card) => {
+export const addCardToDeck = async ({ deckId, card }) => {
   try {
     let decks = await AsyncStorage.getItem(DECKS);
-    decks = JSON.parse(decks);
-    decks[deckId].questions = [...decks[deckId].questions, ...[card]];
-    await AsyncStorage.setItem(DECKS, JSON.stringify(decks));
+    decks = decks ? JSON.parse(decks) : null;
+    if (decks) {
+      decks[deckId].questions = [...decks[deckId].questions, ...[card]];
+      await AsyncStorage.setItem(DECKS, JSON.stringify(decks));
+
+      return {
+        deckId,
+        card,
+      };
+    }
   } catch (error) {
     return error;
   }
