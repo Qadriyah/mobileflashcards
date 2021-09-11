@@ -1,12 +1,20 @@
 import React from "react";
-import { View, Text, TextInput } from "react-native";
+import {
+  View,
+  Text,
+  TextInput,
+  TouchableWithoutFeedback,
+  Keyboard,
+} from "react-native";
 import { useDispatch, useSelector } from "react-redux";
+import PropTypes from "prop-types";
 
 import styles from "./styles";
 import { saveDeckTitle } from "../../redux/actions/deck";
 import Colors from "../../utils/colors";
 import Button from "../../components/Button/Button";
 import Loader from "../../components/Loader/Loader";
+import { KeyboardAvoidingView } from "react-native";
 
 const NewDeckScreen = ({ navigation }) => {
   const dispatch = useDispatch();
@@ -21,7 +29,7 @@ const NewDeckScreen = ({ navigation }) => {
 
   const onSubmit = () => {
     if (!title) {
-      setError("Title is required.");
+      setError("Deck Title is required.");
       return;
     }
     dispatch(saveDeckTitle(title)).then(() => {
@@ -31,19 +39,29 @@ const NewDeckScreen = ({ navigation }) => {
   };
 
   return (
-    <View style={styles.container}>
-      {requesting && <Loader loading={requesting} color={Colors.WHITE} />}
-      <Text style={styles.label}>Enter the title of your new deck</Text>
-      <TextInput
-        style={[styles.input, error ? { shadowColor: Colors.RED } : null]}
-        value={title}
-        placeholder="Deck Title"
-        placeholderTextColor={Colors.GREY}
-        onChangeText={(text) => onChangeText(text)}
-      />
-      <Button label="Submit" onPress={onSubmit} />
-    </View>
+    <TouchableWithoutFeedback onPress={Keyboard.dismiss} accessible={false}>
+      <KeyboardAvoidingView style={{ flex: 1 }} behavior="padding">
+        <View style={styles.container}>
+          {requesting && <Loader loading={requesting} />}
+          <TextInput
+            style={[styles.input, error ? { shadowColor: Colors.RED } : null]}
+            value={title}
+            placeholder="Deck Title"
+            placeholderTextColor={Colors.GREY}
+            onChangeText={(text) => onChangeText(text)}
+          />
+          {error ? <Text style={styles.error}>{error}</Text> : null}
+          <Button label="Submit" onPress={onSubmit} />
+        </View>
+      </KeyboardAvoidingView>
+    </TouchableWithoutFeedback>
   );
+};
+
+NewDeckScreen.propTypes = {
+  navigation: PropTypes.shape({
+    navigate: PropTypes.func.isRequired,
+  }),
 };
 
 export default NewDeckScreen;

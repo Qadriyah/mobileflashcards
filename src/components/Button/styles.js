@@ -9,6 +9,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "center",
     borderRadius: 5,
+    marginBottom: 10,
   },
   label: {
     color: Colors.WHITE,

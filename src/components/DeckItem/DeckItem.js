@@ -6,9 +6,14 @@ import styles from "./styles";
 
 const DeckItem = ({ title, cards, onPress }) => {
   return (
-    <TouchableOpacity style={styles.container} onPress={onPress}>
+    <TouchableOpacity
+      style={styles.container}
+      onPress={() => onPress({ title })}
+    >
       <Text style={styles.title}>{title}</Text>
-      <Text style={styles.counter}>{`${cards} Cards`}</Text>
+      <Text style={styles.counter}>
+        {`${cards} Card${cards === 1 ? "" : "s"}`}
+      </Text>
     </TouchableOpacity>
   );
 };
