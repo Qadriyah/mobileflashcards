@@ -10,6 +10,7 @@ import HomeScreen from "../screens/HomeScreen/HomeScreen";
 import NewDeckScreen from "../screens/NewDeckScreen/NewDeckScreen";
 import DeckScreen from "../screens/DeckScreen/DeckScreen";
 import NewCardScreen from "../screens/NewCardScreen/NewCardScreen";
+import QuizScreen from "../screens/QuizScreen/QuizScreen";
 
 const Tab = createBottomTabNavigator();
 const Stack = createNativeStackNavigator();
@@ -68,6 +69,7 @@ const Navigation = () => {
     >
       <Stack.Screen name="Deck" component={DeckScreen} />
       <Stack.Screen name="Card" component={NewCardScreen} />
+      <Stack.Screen name="Quiz" component={QuizScreen} />
       <Stack.Screen
         name="Home"
         component={BottomTabs}

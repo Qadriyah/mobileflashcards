@@ -8,8 +8,8 @@ import Colors from "../../utils/colors";
 
 const DeckScreen = ({ navigation, route: { params } }) => {
   const title = params ? params.title : "";
-  const deck = useSelector((state) => {
-    return state.decks && state.decks.decks ? state.decks.decks[title] : {};
+  const deck = useSelector(({ decks }) => {
+    return decks && decks.decks ? decks.decks[title] : {};
   });
 
   const onAddCard = () => {
@@ -18,6 +18,7 @@ const DeckScreen = ({ navigation, route: { params } }) => {
 
   const onStartQuiz = () => {
     console.log("Quiz started");
+    navigation.navigate("Quiz", { title });
   };
 
   return (
@@ -35,7 +36,7 @@ const DeckScreen = ({ navigation, route: { params } }) => {
         <Button
           label="Start Quiz"
           onPress={onStartQuiz}
-          style={{ backgroundColor: Colors.BLACK }}
+          style={{ backgroundColor: Colors.BLACK, color: Colors.WHITE }}
         />
       </View>
     </View>
