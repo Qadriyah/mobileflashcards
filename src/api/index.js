@@ -1,11 +1,14 @@
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import { v4 as uuidv4 } from "uuid";
 
 const DECKS = "decks";
 
 export const saveDeck = async (title) => {
   try {
+    const id = uuidv4();
     const newDeck = {
-      [title]: {
+      [id]: {
+        id,
         title,
         questions: [],
       },
@@ -38,12 +41,12 @@ export const getDeck = async (deckId) => {
 
 export const addCardToDeck = async ({ deckId, card }) => {
   try {
+    card.id = uuidv4();
     let decks = await AsyncStorage.getItem(DECKS);
     decks = decks ? JSON.parse(decks) : null;
     if (decks) {
       decks[deckId].questions = [...decks[deckId].questions, ...[card]];
       await AsyncStorage.setItem(DECKS, JSON.stringify(decks));
-
       return {
         deckId,
         card,

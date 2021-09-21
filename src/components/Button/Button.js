@@ -5,9 +5,12 @@ import PropTypes from "prop-types";
 import styles from "./styles";
 
 const Button = ({ label, onPress, style }) => {
+  console.log(style, ">>>????");
   return (
     <TouchableOpacity style={[styles.container, style]} onPress={onPress}>
-      <Text style={styles.label}>{label}</Text>
+      <Text style={[styles.label, style ? { color: style.color } : null]}>
+        {label}
+      </Text>
     </TouchableOpacity>
   );
 };
