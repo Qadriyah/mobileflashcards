@@ -17,8 +17,8 @@ const HomeScreen = ({ navigation }) => {
     dispatch(getAllDecks());
   }, [dispatch]);
 
-  const onPress = ({ title }) => {
-    navigation.navigate("Deck", { title });
+  const onPress = ({ id }) => {
+    navigation.navigate("Deck", { id });
   };
 
   return (
@@ -27,12 +27,13 @@ const HomeScreen = ({ navigation }) => {
         data={decks}
         renderItem={({ item }) => (
           <DeckItem
+            id={item.id}
             title={item.title}
             cards={item.questions.length}
             onPress={onPress}
           />
         )}
-        keyExtractor={(item) => item.title}
+        keyExtractor={(item) => item.id}
         ListEmptyComponent={EmptyComponent}
       />
     </View>

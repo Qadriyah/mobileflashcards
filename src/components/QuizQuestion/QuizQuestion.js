@@ -1,8 +1,7 @@
 import React from "react";
-import { Text, TouchableOpacity, View } from "react-native";
+import { Text } from "react-native";
 import Animated from "react-native-reanimated";
 
-import Button from "../Button/Button";
 import styles from "../../screens/QuizScreen/styles";
 
 const QuizQuestion = ({ question, animatedStyles }) => {

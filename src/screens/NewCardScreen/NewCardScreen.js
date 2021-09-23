@@ -10,7 +10,7 @@ import { saveCard } from "../../redux/actions/deck";
 import Loader from "../../components/Loader/Loader";
 
 const NewCardScreen = ({ navigation, route: { params } }) => {
-  const title = params ? params.title : "";
+  const id = params ? params.id : "";
   const [question, setQuestion] = React.useState("");
   const [answer, setAnswer] = React.useState("");
   const [error, setError] = React.useState({});
@@ -36,11 +36,14 @@ const NewCardScreen = ({ navigation, route: { params } }) => {
       setError({ ...error, answer: "Answer is required." });
       return;
     }
-    diapatch(saveCard({ deckId: title, card: { question, answer } })).then(
-      () => {
-        navigation.navigate("Decks");
-      }
-    );
+    diapatch(
+      saveCard({
+        deckId: id,
+        card: { question, answer },
+      })
+    ).then(() => {
+      navigation.navigate("Decks");
+    });
   };
 
   return (
@@ -65,8 +68,10 @@ const NewCardScreen = ({ navigation, route: { params } }) => {
           error && error.answer ? { shadowColor: Colors.RED } : null,
         ]}
         value={answer}
-        placeholder="Question"
+        placeholder="Answer"
         placeholderTextColor={Colors.GREY}
+        multiline={true}
+        numberOfLines={3}
         onChangeText={(text) => onChangeText({ name: "answer", value: text })}
       />
       {error.answer ? <Text style={styles.error}>{error.answer}</Text> : null}
@@ -81,7 +86,7 @@ NewCardScreen.propTypes = {
   }),
   route: PropTypes.shape({
     params: PropTypes.shape({
-      title: PropTypes.string,
+      id: PropTypes.string,
     }),
   }),
 };

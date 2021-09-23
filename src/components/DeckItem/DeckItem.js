@@ -4,12 +4,9 @@ import PropTypes from "prop-types";
 
 import styles from "./styles";
 
-const DeckItem = ({ title, cards, onPress }) => {
+const DeckItem = ({ title, id, cards, onPress }) => {
   return (
-    <TouchableOpacity
-      style={styles.container}
-      onPress={() => onPress({ title })}
-    >
+    <TouchableOpacity style={styles.container} onPress={() => onPress({ id })}>
       <Text style={styles.title}>{title}</Text>
       <Text style={styles.counter}>
         {`${cards} Card${cards === 1 ? "" : "s"}`}
@@ -20,6 +17,7 @@ const DeckItem = ({ title, cards, onPress }) => {
 
 DeckItem.propTypes = {
   title: PropTypes.string.isRequired,
+  id: PropTypes.string.isRequired,
   cards: PropTypes.number.isRequired,
   onPress: PropTypes.func.isRequired,
 };
