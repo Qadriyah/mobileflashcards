@@ -1,6 +1,6 @@
 import React from "react";
 import { Text, View } from "react-native";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import {
   useSharedValue,
   useDerivedValue,
@@ -13,14 +13,16 @@ import {
 import Button from "../../components/Button/Button";
 import QuizAnswer from "../../components/QuizAnswer/QuizAnswer";
 import QuizQuestion from "../../components/QuizQuestion/QuizQuestion";
-
+import { markGuess, unmarkAllQuestions } from "../../redux/actions/deck";
 import styles from "./styles";
+import ProgressCircle from "../../components/ProgressCircle/ProgressCircle";
 
 const QuizScreen = ({ navigation, route: { params } }) => {
-  const title = params ? params.title : "";
+  const id = params ? params.id : "";
   const [toggle, setToggle] = React.useState(0);
   const flipCard = useSharedValue(0);
   const transition = useDerivedValue(() => withSpring(flipCard.value));
+  const dispatch = useDispatch();
 
   React.useEffect(() => {
     flipCard.value = toggle ? 180 : 0;
@@ -29,16 +31,20 @@ const QuizScreen = ({ navigation, route: { params } }) => {
   const deck = useSelector(({ decks }) => {
     return decks && decks.decks
       ? {
-          title,
-          unMarked: decks.decks[title].questions.filter(
+          id,
+          title: decks.decks[id].title,
+          unMarked: decks.decks[id].questions.filter(
             ({ marked }) => marked === undefined
           ),
-          marked: decks.decks[title].questions.filter(
+          marked: decks.decks[id].questions.filter(
             ({ marked }) => marked !== undefined
           ),
-          totalQuestions: decks.decks[title].questions.length,
-          totalMarked: decks.decks[title].questions.filter(
+          totalQuestions: decks.decks[id].questions.length,
+          totalMarked: decks.decks[id].questions.filter(
             ({ marked }) => marked !== undefined
+          ).length,
+          correct: decks.decks[id].questions.filter(
+            ({ marked }) => marked && marked === "Correct"
           ).length,
         }
       : {};
@@ -68,9 +74,61 @@ const QuizScreen = ({ navigation, route: { params } }) => {
     };
   });
 
-  const onPress = () => {
+  const onFlipCard = () => {
     setToggle(!toggle);
   };
+
+  const markGuessHandler = ({ label }) => {
+    dispatch(
+      markGuess({
+        selectedOption: label,
+        deckId: id,
+        questionId: deck.unMarked[0].id,
+      })
+    ).then(() => setToggle(false));
+  };
+
+  const goBack = () => {
+    navigation.goBack();
+  };
+
+  const startOver = () => {
+    dispatch(unmarkAllQuestions({ deckId: id }));
+  };
+
+  if (deck && deck.unMarked && deck.unMarked.length === 0) {
+    const score =
+      deck.correct && deck.totalQuestions
+        ? (deck.correct / deck.totalQuestions) * 100
+        : 0;
+    return (
+      <>
+        <View style={styles.progressContainer}>
+          <View>
+            <Text style={styles.bigText}>
+              {`${deck.totalMarked}/${deck.totalQuestions}`}
+            </Text>
+          </View>
+          <ProgressCircle score={score} />
+        </View>
+        <View style={styles.bottom}>
+          <Button
+            label="Start over"
+            onPress={startOver}
+            style={styles.correctButton}
+          />
+          <Button
+            label="Back to deck"
+            onPress={goBack}
+            style={{
+              ...styles.correctButton,
+              ...styles.wrongButton,
+            }}
+          />
+        </View>
+      </>
+    );
+  }
 
   return (
     <>
@@ -87,14 +145,13 @@ const QuizScreen = ({ navigation, route: { params } }) => {
           />
           <QuizQuestion
             question={deck.unMarked[0].question}
-            onPress={onPress}
             animatedStyles={frontAnimatedStyle}
           />
         </View>
         <View>
           <Button
             label={`${toggle ? "View Question" : "View Answer"}`}
-            onPress={onPress}
+            onPress={onFlipCard}
             style={styles.button}
           />
         </View>
@@ -103,13 +160,16 @@ const QuizScreen = ({ navigation, route: { params } }) => {
         <View style={styles.bottom}>
           <Button
             label="Correct"
-            onPress={onPress}
+            onPress={markGuessHandler}
             style={styles.correctButton}
           />
           <Button
             label="Incorrect"
-            onPress={onPress}
-            style={{ ...styles.correctButton, ...styles.wrongButton }}
+            onPress={markGuessHandler}
+            style={{
+              ...styles.correctButton,
+              ...styles.wrongButton,
+            }}
           />
         </View>
       ) : null}

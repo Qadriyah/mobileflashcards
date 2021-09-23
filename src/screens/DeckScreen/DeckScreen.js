@@ -7,18 +7,18 @@ import Button from "../../components/Button/Button";
 import Colors from "../../utils/colors";
 
 const DeckScreen = ({ navigation, route: { params } }) => {
-  const title = params ? params.title : "";
+  const id = params ? params.id : "";
   const deck = useSelector(({ decks }) => {
-    return decks && decks.decks ? decks.decks[title] : {};
+    return decks && decks.decks ? decks.decks[id] : {};
   });
 
   const onAddCard = () => {
-    navigation.navigate("Card", { title });
+    navigation.navigate("Card", { id });
   };
 
   const onStartQuiz = () => {
     console.log("Quiz started");
-    navigation.navigate("Quiz", { title });
+    navigation.navigate("Quiz", { id });
   };
 
   return (

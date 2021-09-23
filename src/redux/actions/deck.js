@@ -1,5 +1,11 @@
 import * as types from "../constants/deck";
-import { saveDeck, getDecks, addCardToDeck } from "../../api";
+import {
+  saveDeck,
+  getDecks,
+  addCardToDeck,
+  markQuestion,
+  unmarkQuestions,
+} from "../../api";
 
 const saveDeckRequest = (promise) => {
   return {
@@ -104,6 +110,78 @@ export const saveCard = ({ deckId, card }) => {
       })
       .catch((error) => {
         dispatch(saveCardFailed(error));
+      });
+    return promise;
+  };
+};
+
+const markGuessRequest = (promise) => {
+  return {
+    type: types.MARK_GUESS_REQUEST,
+    payload: promise,
+  };
+};
+
+const markGuessFailed = (error) => {
+  return {
+    type: types.MARK_GUESS_FAILED,
+    payload: error,
+  };
+};
+
+const markGuessSuccess = (option) => {
+  return {
+    type: types.MARK_GUESS_SUCCESS,
+    payload: option,
+  };
+};
+
+export const markGuess = ({ selectedOption, deckId, questionId }) => {
+  return (dispatch) => {
+    const promise = markQuestion({ selectedOption, deckId, questionId });
+    dispatch(markGuessRequest(promise));
+    promise
+      .then((data) => {
+        dispatch(markGuessSuccess(data));
+      })
+      .catch((error) => {
+        dispatch(markGuessFailed(error));
+      });
+    return promise;
+  };
+};
+
+const unmarkQuestionsRequest = (promise) => {
+  return {
+    type: types.UNMARK_QUESTION_REQUEST,
+    payload: promise,
+  };
+};
+
+const unmarkQuestionsFailed = (error) => {
+  return {
+    type: types.UNMARK_QUESTION_FAILED,
+    payload: error,
+  };
+};
+
+const unmarkQuestionsSuccess = (deck) => {
+  return {
+    type: types.UNMARK_QUESTION_SUCCESS,
+    payload: deck,
+  };
+};
+
+export const unmarkAllQuestions = ({ deckId }) => {
+  return (dispatch) => {
+    const promise = unmarkQuestions({ deckId });
+    dispatch(unmarkQuestionsRequest(promise));
+    promise
+      .then((data) => {
+        dispatch(unmarkQuestionsSuccess(data));
+      })
+      .catch((error) => {
+        dispatch(unmarkQuestionsFailed(error));
       });
     return promise;
   };

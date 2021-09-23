@@ -68,6 +68,11 @@ const styles = StyleSheet.create({
     backgroundColor: Colors.GREEN,
     color: Colors.WHITE,
   },
+  progressContainer: {
+    flex: 1,
+    alignItems: "center",
+    justifyContent: "center",
+  },
 });
 
 export default styles;

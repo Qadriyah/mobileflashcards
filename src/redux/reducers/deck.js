@@ -82,6 +82,70 @@ const deckReducer = (state = initialState, action) => {
         },
       };
 
+    case types.MARK_GUESS_REQUEST:
+      return {
+        ...state,
+        requesting: true,
+      };
+
+    case types.MARK_GUESS_FAILED:
+      return {
+        ...state,
+        requesting: false,
+        error: action.payload,
+      };
+
+    case types.MARK_GUESS_SUCCESS:
+      const { deckId: id, card: answeredQuestion } = action.payload;
+      return {
+        ...state,
+        requesting: false,
+        success: true,
+        error: null,
+        decks: {
+          ...state.decks,
+          [id]: {
+            ...state.decks[id],
+            questions: state.decks[id].questions.map((question) => {
+              if (question.id === answeredQuestion.id) {
+                question = { ...answeredQuestion };
+                return question;
+              }
+              return question;
+            }),
+          },
+        },
+      };
+
+    case types.UNMARK_QUESTION_REQUEST:
+      return {
+        ...state,
+        requesting: true,
+      };
+
+    case types.UNMARK_QUESTION_FAILED:
+      return {
+        ...state,
+        requesting: false,
+        error: action.payload,
+      };
+
+    case types.UNMARK_QUESTION_SUCCESS:
+      const { deck } = action.payload;
+      return {
+        ...state,
+        requesting: false,
+        success: true,
+        error: null,
+        decks: {
+          ...state.decks,
+          [deck.id]: {
+            ...state.decks[deck.id],
+            ...deck,
+          },
+        },
+      };
+
     default:
       return state;
   }
