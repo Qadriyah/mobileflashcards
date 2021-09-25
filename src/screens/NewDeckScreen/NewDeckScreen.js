@@ -5,6 +5,7 @@ import {
   TextInput,
   TouchableWithoutFeedback,
   Keyboard,
+  Platform,
 } from "react-native";
 import { useDispatch, useSelector } from "react-redux";
 import PropTypes from "prop-types";
@@ -32,15 +33,19 @@ const NewDeckScreen = ({ navigation }) => {
       setError("Deck Title is required.");
       return;
     }
-    dispatch(saveDeckTitle(title)).then(() => {
+    dispatch(saveDeckTitle(title)).then((deck) => {
       setTitle("");
-      navigation.navigate("Decks");
+      const id = Object.values(deck)[0].id;
+      navigation.navigate("Deck", { id });
     });
   };
 
   return (
     <TouchableWithoutFeedback onPress={Keyboard.dismiss} accessible={false}>
-      <KeyboardAvoidingView style={{ flex: 1 }} behavior="padding">
+      <KeyboardAvoidingView
+        style={{ flex: 1 }}
+        behavior={`${Platform.OS === "ios" ? "padding" : "height"}`}
+      >
         <View style={styles.container}>
           {requesting && <Loader loading={requesting} />}
           <TextInput

@@ -9,7 +9,9 @@ import Colors from "../../utils/colors";
 const DeckScreen = ({ navigation, route: { params } }) => {
   const id = params ? params.id : "";
   const deck = useSelector(({ decks }) => {
-    return decks && decks.decks ? decks.decks[id] : {};
+    return decks && decks.decks && decks.decks[id]
+      ? decks.decks[id]
+      : { title: "", questions: [] };
   });
 
   const onAddCard = () => {
@@ -17,7 +19,6 @@ const DeckScreen = ({ navigation, route: { params } }) => {
   };
 
   const onStartQuiz = () => {
-    console.log("Quiz started");
     navigation.navigate("Quiz", { id });
   };
 

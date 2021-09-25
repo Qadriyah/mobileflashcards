@@ -1,5 +1,13 @@
 import React from "react";
-import { View, TextInput, Text } from "react-native";
+import {
+  View,
+  TextInput,
+  Text,
+  TouchableWithoutFeedback,
+  KeyboardAvoidingView,
+  Keyboard,
+  Platform,
+} from "react-native";
 import { useDispatch, useSelector } from "react-redux";
 import PropTypes from "prop-types";
 
@@ -42,41 +50,54 @@ const NewCardScreen = ({ navigation, route: { params } }) => {
         card: { question, answer },
       })
     ).then(() => {
-      navigation.navigate("Decks");
+      navigation.navigate("Home");
     });
   };
 
   return (
-    <View style={styles.container}>
-      {requesting && <Loader loading={requesting} />}
-      <TextInput
-        style={[
-          styles.input,
-          error && error.question ? { shadowColor: Colors.RED } : null,
-        ]}
-        value={question}
-        placeholder="Question"
-        placeholderTextColor={Colors.GREY}
-        onChangeText={(text) => onChangeText({ name: "question", value: text })}
-      />
-      {error.question ? (
-        <Text style={styles.error}>{error.question}</Text>
-      ) : null}
-      <TextInput
-        style={[
-          styles.input,
-          error && error.answer ? { shadowColor: Colors.RED } : null,
-        ]}
-        value={answer}
-        placeholder="Answer"
-        placeholderTextColor={Colors.GREY}
-        multiline={true}
-        numberOfLines={3}
-        onChangeText={(text) => onChangeText({ name: "answer", value: text })}
-      />
-      {error.answer ? <Text style={styles.error}>{error.answer}</Text> : null}
-      <Button label="Submit" onPress={onSubmit} />
-    </View>
+    <TouchableWithoutFeedback onPress={Keyboard.dismiss} accessible={false}>
+      <KeyboardAvoidingView
+        style={{ flex: 1 }}
+        behavior={`${Platform.OS === "ios" ? "padding" : "height"}`}
+      >
+        <View style={styles.container}>
+          {requesting && <Loader loading={requesting} />}
+          <TextInput
+            style={[
+              styles.input,
+              error && error.question ? { shadowColor: Colors.RED } : null,
+            ]}
+            value={question}
+            placeholder="Question"
+            placeholderTextColor={Colors.GREY}
+            onChangeText={(text) =>
+              onChangeText({ name: "question", value: text })
+            }
+          />
+          {error.question ? (
+            <Text style={styles.error}>{error.question}</Text>
+          ) : null}
+          <TextInput
+            style={[
+              styles.input,
+              error && error.answer ? { shadowColor: Colors.RED } : null,
+            ]}
+            value={answer}
+            placeholder="Answer"
+            placeholderTextColor={Colors.GREY}
+            multiline={true}
+            numberOfLines={3}
+            onChangeText={(text) =>
+              onChangeText({ name: "answer", value: text })
+            }
+          />
+          {error.answer ? (
+            <Text style={styles.error}>{error.answer}</Text>
+          ) : null}
+          <Button label="Submit" onPress={onSubmit} />
+        </View>
+      </KeyboardAvoidingView>
+    </TouchableWithoutFeedback>
   );
 };
 

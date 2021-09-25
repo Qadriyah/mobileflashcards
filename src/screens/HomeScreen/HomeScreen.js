@@ -1,5 +1,5 @@
 import React from "react";
-import { View, FlatList } from "react-native";
+import { View, FlatList, Text } from "react-native";
 
 import styles from "./styles";
 import { useDispatch, useSelector } from "react-redux";
@@ -29,11 +29,11 @@ const HomeScreen = ({ navigation }) => {
           <DeckItem
             id={item.id}
             title={item.title}
-            cards={item.questions.length}
+            cards={item.questions ? item.questions.length : 0}
             onPress={onPress}
           />
         )}
-        keyExtractor={(item) => item.id}
+        keyExtractor={({ id }) => id}
         ListEmptyComponent={EmptyComponent}
       />
     </View>
