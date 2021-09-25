@@ -1,6 +1,7 @@
 import React from "react";
 import { Text, View } from "react-native";
 import { useSelector } from "react-redux";
+import PropTypes from "prop-types";
 
 import styles from "./styles";
 import Button from "../../components/Button/Button";
@@ -42,6 +43,17 @@ const DeckScreen = ({ navigation, route: { params } }) => {
       </View>
     </View>
   );
+};
+
+DeckScreen.propTypes = {
+  navigation: PropTypes.shape({
+    navigate: PropTypes.func.isRequired,
+  }),
+  route: PropTypes.shape({
+    params: PropTypes.shape({
+      id: PropTypes.string,
+    }),
+  }),
 };
 
 export default DeckScreen;

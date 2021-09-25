@@ -1,5 +1,6 @@
 import React from "react";
-import { View, FlatList, Text } from "react-native";
+import { View, FlatList } from "react-native";
+import PropTypes from "prop-types";
 
 import styles from "./styles";
 import { useDispatch, useSelector } from "react-redux";
@@ -38,6 +39,12 @@ const HomeScreen = ({ navigation }) => {
       />
     </View>
   );
+};
+
+HomeScreen.propTypes = {
+  navigation: PropTypes.shape({
+    navigate: PropTypes.func.isRequired,
+  }),
 };
 
 export default HomeScreen;

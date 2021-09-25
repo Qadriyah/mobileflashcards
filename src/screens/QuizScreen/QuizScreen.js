@@ -9,6 +9,7 @@ import {
   interpolate,
   Extrapolate,
 } from "react-native-reanimated";
+import PropTypes from "prop-types";
 
 import Button from "../../components/Button/Button";
 import QuizAnswer from "../../components/QuizAnswer/QuizAnswer";
@@ -196,6 +197,17 @@ const QuizScreen = ({ navigation, route: { params } }) => {
       ) : null}
     </>
   );
+};
+
+QuizScreen.propTypes = {
+  navigation: PropTypes.shape({
+    navigate: PropTypes.func.isRequired,
+  }),
+  route: PropTypes.shape({
+    params: PropTypes.shape({
+      id: PropTypes.string,
+    }),
+  }),
 };
 
 export default QuizScreen;

@@ -1,6 +1,7 @@
 import React from "react";
 import { Dimensions, View, Text } from "react-native";
 import Svg, { Circle } from "react-native-svg";
+import PropTypes from "prop-types";
 
 import Colors from "../../utils/colors";
 import styles from "./styles";
@@ -40,6 +41,10 @@ const ProgressCircle = ({ score }) => {
       </Svg>
     </View>
   );
+};
+
+ProgressCircle.propTypes = {
+  score: PropTypes.number.isRequired,
 };
 
 export default ProgressCircle;
