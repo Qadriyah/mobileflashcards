@@ -16,6 +16,11 @@ import QuizQuestion from "../../components/QuizQuestion/QuizQuestion";
 import { markGuess, unmarkAllQuestions } from "../../redux/actions/deck";
 import styles from "./styles";
 import ProgressCircle from "../../components/ProgressCircle/ProgressCircle";
+import {
+  allowsNotificationsAsync,
+  clearNotifications,
+  createNotification,
+} from "../../utils/notifications";
 
 const QuizScreen = ({ navigation, route: { params } }) => {
   const id = params ? params.id : "";
@@ -23,13 +28,27 @@ const QuizScreen = ({ navigation, route: { params } }) => {
   const flipCard = useSharedValue(0);
   const transition = useDerivedValue(() => withSpring(flipCard.value));
   const dispatch = useDispatch();
+  const didMountRef = React.useRef(false);
 
   React.useEffect(() => {
     flipCard.value = toggle ? 180 : 0;
+    if (didMountRef.current) {
+      if (deck && deck.totalMarked === deck.totalQuestions) {
+        (async () => {
+          const status = await allowsNotificationsAsync();
+          if (status) {
+            await clearNotifications();
+            await createNotification();
+          }
+        })();
+      }
+    } else {
+      didMountRef.current = true;
+    }
   }, [toggle]);
 
   const deck = useSelector(({ decks }) => {
-    return decks && decks.decks
+    return decks && decks.decks && Object.keys(decks.decks).length > 0
       ? {
           id,
           title: decks.decks[id].title,
@@ -85,11 +104,13 @@ const QuizScreen = ({ navigation, route: { params } }) => {
         deckId: id,
         questionId: deck.unMarked[0].id,
       })
-    ).then(() => setToggle(false));
+    ).then(() => {
+      setToggle(false);
+    });
   };
 
   const goBack = () => {
-    navigation.goBack();
+    navigation.replace("Deck");
   };
 
   const startOver = () => {
@@ -99,7 +120,7 @@ const QuizScreen = ({ navigation, route: { params } }) => {
   if (deck && deck.unMarked && deck.unMarked.length === 0) {
     const score =
       deck.correct && deck.totalQuestions
-        ? (deck.correct / deck.totalQuestions) * 100
+        ? Math.floor((deck.correct / deck.totalQuestions) * 100)
         : 0;
     return (
       <>
@@ -113,12 +134,12 @@ const QuizScreen = ({ navigation, route: { params } }) => {
         </View>
         <View style={styles.bottom}>
           <Button
-            label="Start over"
+            label="Restart Quiz"
             onPress={startOver}
             style={styles.correctButton}
           />
           <Button
-            label="Back to deck"
+            label="Back to Deck"
             onPress={goBack}
             style={{
               ...styles.correctButton,
@@ -140,11 +161,11 @@ const QuizScreen = ({ navigation, route: { params } }) => {
         </View>
         <View style={styles.parent}>
           <QuizAnswer
-            answer={deck.unMarked[0].answer}
+            answer={deck && deck.unMarked ? deck.unMarked[0].answer : ""}
             animatedStyles={backAnimatedStyle}
           />
           <QuizQuestion
-            question={deck.unMarked[0].question}
+            question={deck && deck.unMarked ? deck.unMarked[0].question : ""}
             animatedStyles={frontAnimatedStyle}
           />
         </View>

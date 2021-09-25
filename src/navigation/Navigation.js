@@ -2,7 +2,6 @@ import React from "react";
 import { View } from "react-native";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
-import { getFocusedRouteNameFromRoute } from "@react-navigation/native";
 import { MaterialIcons, MaterialCommunityIcons } from "@expo/vector-icons";
 
 import Colors from "../utils/colors";
@@ -56,25 +55,22 @@ const BottomTabs = () => {
 const Navigation = () => {
   return (
     <Stack.Navigator
-      initialRouteName="Home"
-      screenOptions={({ route }) => {
-        return {
-          title: route.name === "Card" ? "New Card" : route.name,
-          headerTintColor: Colors.WHITE,
-          headerStyle: { backgroundColor: Colors.GREEN },
-          headerBackTitleVisible: false,
-          headerTitleStyle: { fontSize: 18 },
-        };
-      }}
+      screenOptions={({ route }) => ({
+        title: route.name === "Card" ? "New Card" : route.name,
+        headerTintColor: Colors.WHITE,
+        headerStyle: { backgroundColor: Colors.GREEN },
+        headerBackTitleVisible: false,
+        headerTitleStyle: { fontSize: 18 },
+      })}
     >
-      <Stack.Screen name="Deck" component={DeckScreen} />
-      <Stack.Screen name="Card" component={NewCardScreen} />
-      <Stack.Screen name="Quiz" component={QuizScreen} />
       <Stack.Screen
         name="Home"
         component={BottomTabs}
         options={() => ({ headerShown: false })}
       />
+      <Stack.Screen name="Card" component={NewCardScreen} />
+      <Stack.Screen name="Quiz" component={QuizScreen} />
+      <Stack.Screen name="Deck" component={DeckScreen} />
     </Stack.Navigator>
   );
 };
