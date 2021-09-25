@@ -20,7 +20,10 @@ const Button = ({ label, onPress, style }) => {
 Button.propTypes = {
   label: PropTypes.string.isRequired,
   onPress: PropTypes.func.isRequired,
-  style: PropTypes.shape({ backgroundColor: PropTypes.string }),
+  style: PropTypes.shape({
+    backgroundColor: PropTypes.string,
+    color: PropTypes.string,
+  }),
 };
 
 export default Button;
