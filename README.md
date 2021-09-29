@@ -9,7 +9,9 @@ It also creates daily reminders that remind users to take the quiz for that day 
 - [Dependencies](#dependencies)
 - [Prerequisites](#prerequisites)
 - [To install dependencies run](#to-install-the-dependencies-run)
-- [Starting the application](#starting-the-application)
+- [Starting the metro server](#starting-the-metro-server)
+- [Running the application](#running-the-application)
+- [Tested platforms](#tested-platforms)
 
 ### Dependencies
 
