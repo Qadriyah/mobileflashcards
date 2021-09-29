@@ -50,7 +50,7 @@ const NewCardScreen = ({ navigation, route: { params } }) => {
         card: { question, answer },
       })
     ).then(() => {
-      navigation.navigate("Home");
+      navigation.goBack();
     });
   };
 
@@ -104,6 +104,7 @@ const NewCardScreen = ({ navigation, route: { params } }) => {
 NewCardScreen.propTypes = {
   navigation: PropTypes.shape({
     navigate: PropTypes.func.isRequired,
+    goBack: PropTypes.func.isRequired,
   }),
   route: PropTypes.shape({
     params: PropTypes.shape({

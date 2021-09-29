@@ -18,7 +18,7 @@ import { markGuess, unmarkAllQuestions } from "../../redux/actions/deck";
 import styles from "./styles";
 import ProgressCircle from "../../components/ProgressCircle/ProgressCircle";
 import {
-  allowsNotificationsAsync,
+  allowNotificationsAsync,
   clearNotifications,
   createNotification,
 } from "../../utils/notifications";
@@ -36,7 +36,7 @@ const QuizScreen = ({ navigation, route: { params } }) => {
     if (didMountRef.current) {
       if (deck && deck.totalMarked === deck.totalQuestions) {
         (async () => {
-          const status = await allowsNotificationsAsync();
+          const status = await allowNotificationsAsync();
           if (status) {
             await clearNotifications();
             await createNotification();
@@ -111,7 +111,7 @@ const QuizScreen = ({ navigation, route: { params } }) => {
   };
 
   const goBack = () => {
-    navigation.replace("Deck");
+    navigation.goBack(null);
   };
 
   const startOver = () => {
@@ -202,6 +202,7 @@ const QuizScreen = ({ navigation, route: { params } }) => {
 QuizScreen.propTypes = {
   navigation: PropTypes.shape({
     navigate: PropTypes.func.isRequired,
+    goBack: PropTypes.func.isRequired,
   }),
   route: PropTypes.shape({
     params: PropTypes.shape({

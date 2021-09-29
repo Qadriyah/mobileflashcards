@@ -11,6 +11,18 @@ Notifications.setNotificationHandler({
 
 const NOTIFICATION_ID = "NOTIFICATION_ID";
 
+const notificationMessage = () => ({
+  content: {
+    title: "Complete your daily quiz",
+    body: "Dont forget to complete atleast one quiz for today",
+  },
+  trigger: {
+    hour: 10,
+    minute: 0,
+    repeats: true,
+  },
+});
+
 export const requestPermissionsAsync = async () => {
   try {
     return await Notifications.requestPermissionsAsync({
@@ -26,12 +38,12 @@ export const requestPermissionsAsync = async () => {
   }
 };
 
-export const allowsNotificationsAsync = async () => {
+export const allowNotificationsAsync = async () => {
   try {
     const settings = await Notifications.getPermissionsAsync();
     return (
       settings.granted ||
-      settings.ios?.status === Notifications.IosAuthorizationStatus.PROVISIONAL
+      settings.ios.status === Notifications.IosAuthorizationStatus.PROVISIONAL
     );
   } catch (error) {
     return error;
@@ -40,23 +52,16 @@ export const allowsNotificationsAsync = async () => {
 
 export const createNotification = async () => {
   try {
-    let trigger = {
-      hour: 18,
-      minute: 30,
-      repeats: true,
-    };
-
     let notificationId = await AsyncStorage.getItem(NOTIFICATION_ID);
     if (!notificationId) {
-      await Notifications.cancelAllScheduledNotificationsAsync();
-      notificationId = await Notifications.scheduleNotificationAsync({
-        content: {
-          title: "Complete your daily quiz",
-          body: "Dont forget to complete atleast one quiz for today",
-        },
-        trigger,
-      });
-      await AsyncStorage.setItem(NOTIFICATION_ID, notificationId);
+      const status = await allowNotificationsAsync();
+      if (status) {
+        await Notifications.cancelAllScheduledNotificationsAsync();
+        notificationId = await Notifications.scheduleNotificationAsync(
+          notificationMessage()
+        );
+        await AsyncStorage.setItem(NOTIFICATION_ID, notificationId);
+      }
     }
     return notificationId;
   } catch (error) {
