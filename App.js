@@ -6,7 +6,10 @@ import { Provider } from "react-redux";
 import Navigation from "./src/navigation/Navigation";
 import Colors from "./src/utils/colors";
 import configureStore from "./src/redux/store/index";
-import { requestPermissionsAsync } from "./src/utils/notifications";
+import {
+  createNotification,
+  requestPermissionsAsync,
+} from "./src/utils/notifications";
 
 const store = configureStore({});
 
@@ -14,6 +17,7 @@ export default function App() {
   React.useEffect(() => {
     (async () => {
       await requestPermissionsAsync();
+      await createNotification();
     })();
   }, []);
 

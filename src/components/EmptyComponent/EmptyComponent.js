@@ -7,8 +7,8 @@ import styles from "./styles";
 const EmptyComponent = () => {
   return (
     <View style={styles.container}>
-      <MaterialIcons name="hourglass-empty" size={90} color={Colors.GREY} />
-      <Text style={styles.label}>No data to display</Text>
+      <MaterialIcons name="hourglass-empty" size={80} color={Colors.GREY} />
+      <Text style={styles.label}>No decks to display</Text>
     </View>
   );
 };
